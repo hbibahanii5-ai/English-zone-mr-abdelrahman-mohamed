@@ -9,7 +9,10 @@ import { db, bcrypt, id, now } from './db.js';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const app = express();
-const proofDir = join(root, 'data', 'payment-proofs');
+const dataDir = process.env.DATA_DIR
+  ? (process.env.DATA_DIR.startsWith('/') ? process.env.DATA_DIR : join(root, process.env.DATA_DIR))
+  : join(root, 'data');
+const proofDir = join(dataDir, 'payment-proofs');
 mkdirSync(proofDir, { recursive: true });
 const upload = multer({ dest: proofDir, limits: { fileSize: 5 * 1024 * 1024 } });
 const JWT_SECRET = process.env.JWT_SECRET || 'english-zone-development-secret-change-me';

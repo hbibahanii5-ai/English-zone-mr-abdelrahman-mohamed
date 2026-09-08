@@ -5,7 +5,9 @@ import { fileURLToPath } from 'node:url';
 import bcrypt from 'bcryptjs';
 
 const root = dirname(fileURLToPath(import.meta.url));
-const dataDir = join(root, 'data');
+const dataDir = process.env.DATA_DIR
+  ? (process.env.DATA_DIR.startsWith('/') ? process.env.DATA_DIR : join(root, process.env.DATA_DIR))
+  : join(root, 'data');
 mkdirSync(dataDir, { recursive: true });
 const db = new Database(join(dataDir, 'english-zone.sqlite'));
 db.pragma('foreign_keys = ON');
